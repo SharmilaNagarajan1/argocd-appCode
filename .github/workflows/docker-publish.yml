@@ -36,3 +36,5 @@ jobs:
         run: |
           docker build -t $DOCKERHUB_USERNAME/checkout-service ./checkout
           docker push $DOCKERHUB_USERNAME/checkout-service
+
+          
