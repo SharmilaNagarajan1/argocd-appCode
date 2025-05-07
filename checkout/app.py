@@ -4,11 +4,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return 'checkout Service is running!'
+    return 'checkout Service !'
 
 @app.route('/checkout')
 def checkout():
-    return 'Checkout Service Working!'
+    return 'checkout Service is running!'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
