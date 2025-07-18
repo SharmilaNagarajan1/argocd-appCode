@@ -39,7 +39,7 @@ jobs:
           push: true
           tags: |
              ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:latest
-             ${{ secrets.DOCKERHUB_USERNAME }}/login-service:${{ github.sha }}
+             ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:${{ github.sha }}
 
       - name: Build and push checkout service
         uses: docker/build-push-action@v4
@@ -48,7 +48,7 @@ jobs:
           push: true
           tags: |
              ${{ secrets.DOCKERHUB_USERNAME }}/checkout-service:latest
-             ${{ secrets.DOCKERHUB_USERNAME }}/login-service:${{ github.sha }}
+             ${{ secrets.DOCKERHUB_USERNAME }}/checkout-service:${{ github.sha }}
 
     
 
