@@ -6,11 +6,11 @@ on:
       - main
 
 env:
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  GITOPS_REPO: https://github.com/SharmilaNagarajan1/argocd-deploy.git
+  
+  GITOPS_REPO: SharmilaNagarajan1/argocd-deploy
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,8 +50,20 @@ jobs:
              ${{ secrets.DOCKERHUB_USERNAME }}/checkout-service:latest
              ${{ secrets.DOCKERHUB_USERNAME }}/checkout-service:${{ github.sha }}
 
-    
+      - name: Clone GitOPs repo and update manifest
+        run: |
+          git config --global user.email "${{ secrets.GIT_EMAIL }}"
+          git config --global user.name "${{ secrets.GIT_NAME }}"
 
+          git clone https://${{ secrets.GITOPS_PAT}}@${{ env.GITOPS_REPO }} 
+          cd argocd-deploy
    
+          sed -i "s|image: .*login-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/login-service:latest|" login-deployment.yaml
+          sed -i "s|image: .*payment-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:latest|" payment-deployment.yaml
+          sed -i "s|image: .*checkout-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/checkout-service:latest|" checkout-deployment.yaml
+
+          git add .
+          git commit -m "CI: Update image tags for login, payment, checkout"
+          git push 
 
           
