@@ -1,4 +1,4 @@
-name: Build and Push Microservices
+name: ArgoCD App
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  GITOPS_REPO: https://github.com/SharmilaNagarajan1/argocd-deploy.git
 
 jobs:
   build-and-push:
@@ -23,18 +24,34 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push login service
-        run: |
-          docker build -t $DOCKERHUB_USERNAME/login-service ./login
-          docker push $DOCKERHUB_USERNAME/login-service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./login
+          push: true
+          tags: |
+             ${{ secrets.DOCKERHUB_USERNAME }}/login-service:latest
+             ${{ secrets.DOCKERHUB_USERNAME }}/login-service:${{ github.sha }}
 
       - name: Build and push payment service
-        run: |
-          docker build -t $DOCKERHUB_USERNAME/payment-service ./payment
-          docker push $DOCKERHUB_USERNAME/payment-service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./payment
+          push: true
+          tags: |
+             ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:latest
+             ${{ secrets.DOCKERHUB_USERNAME }}/login-service:${{ github.sha }}
 
       - name: Build and push checkout service
-        run: |
-          docker build -t $DOCKERHUB_USERNAME/checkout-service ./checkout
-          docker push $DOCKERHUB_USERNAME/checkout-service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./checkout
+          push: true
+          tags: |
+             ${{ secrets.DOCKERHUB_USERNAME }}/checkout-service:latest
+             ${{ secrets.DOCKERHUB_USERNAME }}/login-service:${{ github.sha }}
+
+    
+
+   
 
           
