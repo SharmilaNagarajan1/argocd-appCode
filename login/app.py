@@ -8,7 +8,7 @@ def home():
 
 @app.route('/login')
 def login():
-    return 'Login functinality is running!'
+    return 'Login service is running!'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
