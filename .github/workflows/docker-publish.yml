@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  DOCKERHUB_USERNAME: sharmila231
+  DOCKERHUB_USERNAME: secrets.DOCKERHUB_USERNAME
 
 jobs:
   build-and-push:
