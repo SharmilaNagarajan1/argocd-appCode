@@ -62,8 +62,13 @@ jobs:
           sed -i "s|image: .*payment-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:latest|" payment-deployment.yaml
           sed -i "s|image: .*checkout-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/checkout-service:latest|" checkout-deployment.yaml
 
-          git add .
-          git commit -m "CI: Update image tags for login, payment, checkout"
-          git push 
+          if git diff --quiet; then
+             echo "No changes in image tag — skipping commit."
+          else
+            git add deployment.yaml
+            git commit -m "Update image to ${{ github.sha }}"
+            git push origin main
+          fi
+ 
 
           
