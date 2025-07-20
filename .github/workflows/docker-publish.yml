@@ -58,14 +58,15 @@ jobs:
           git clone https://${{ secrets.GITOPS_PAT }}@github.com/${{ env.GITOPS_REPO }}.git
           cd argocd-deploy
    
-          sed -i "s|image: .*login-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/login-service:latest|" login-deployment.yaml
-          sed -i "s|image: .*payment-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:latest|" payment-deployment.yaml
-          sed -i "s|image: .*checkout-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/checkout-service:latest|" checkout-deployment.yaml
+          sed -i "s|image: .*login-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/login-service:${{ github.sha }}|" login-deployment.yaml
+
+          sed -i "s|image: .*payment-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:${{ github.sha }}|" payment-deployment.yaml
+          sed -i "s|image: .*checkout-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/checkout-service:${{ github.sha }}|" checkout-deployment.yaml
 
           if git diff --quiet; then
              echo "No changes in image tag — skipping commit."
           else
-            git add deployment.yaml
+            git add login-deployment.yaml payment-deployment.yaml checkout-deployment.yaml
             git commit -m "Update image to ${{ github.sha }}"
             git push origin main
           fi
