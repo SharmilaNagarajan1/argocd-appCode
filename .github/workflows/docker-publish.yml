@@ -69,7 +69,7 @@ jobs:
           if git diff --quiet; then
              echo "No changes in image tag — skipping commit."
           else
-            git add login-deployment.yaml payment-deployment.yaml checkout-deployment.yaml
+            git add manifest/login-deployment.yaml manifest/payment-deployment.yaml manifest/checkout-deployment.yaml
             git commit -m "Update image to ${{ github.sha }}"
             git push origin main
           fi    
