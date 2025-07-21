@@ -58,9 +58,9 @@ jobs:
           git clone https://${{ secrets.GITOPS_PAT }}@github.com/${{ env.GITOPS_REPO }}.git
           cd argocd-deploy
    
-         # sed is a stream editor used to perform basic text transformations.
-         # -i means edit the file in-place, i.e., modify the file directly.
-         # s|<search_pattern>|<replacement>| This is a substitution command in sed
+          # sed is a stream editor used to perform basic text transformations.
+          # -i means edit the file in-place, i.e., modify the file directly.
+          # s|<search_pattern>|<replacement>| This is a substitution command in sed
 
           sed -i "s|image: .*login-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/login-service:${{ github.sha }}|" manifest/login-deployment.yaml
           sed -i "s|image: .*payment-service.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:${{ github.sha }}|" manifest/payment-deployment.yaml
